@@ -34,7 +34,6 @@ El equipo detrás del Sistema de Alerta Sísmica está formado por:
 
 - [Eduardo Rubén Dominguez](https://github.com/edwardhight52391558) Data Engineer - Machine Learning
 - [Sebastian Gomez Estrada](https://github.com/Mezgo?tab=repositories) Data Analyst - Data Engineer
-- [Diego Mauro Daniel Maneyro](https://github.com/diegomaneyro) Data Engineer
 - [Beatriz Rodriguez](https://github.com/Bearodriguez2022) Data Engineer - Data Analyst
 - [Gonzalo Carballo](https://github.com/gonzalocba) Functional analysis - Bi
 
@@ -60,7 +59,7 @@ Herramientas utilizadas durante este proyecto
 
 
 ## Diagrama de Gantt
-[Link]()
+[Link]('https://1drv.ms/x/s!AuJ6RRKB6qVXhpZrAZSYngK8NrqbYQ?e=Sba68Z')
 
 
 
