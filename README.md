@@ -94,7 +94,7 @@ Herramientas utilizadas durante este proyecto
 
 
 ## Diagrama de Gantt
-![Link](https://1drv.ms/x/s!AuJ6RRKB6qVXhpZrAZSYngK8NrqbYQ?e=Sba68Z)
+[Link](https://1drv.ms/x/s!AuJ6RRKB6qVXhpZrAZSYngK8NrqbYQ?e=Sba68Z)
 
 
 
