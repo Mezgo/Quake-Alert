@@ -1,10 +1,45 @@
-# Alerta Sismica
-
+# Quake Alert
+ 
 <p align="center">
 <img src="https://github.com/diegomaneyro/Alerta-Sismica/blob/main/imagenes/sismo_portada.webp"  height=250> 
 </p>
 
-## El Sistema de Alerta Sísmica es un proyecto que busca crear un sistema efectivo y seguro de alerta temprana para la población ante posibles terremotos.
+## Quake Alert es un proyecto que busca crear un sistema efectivo y seguro de clasificacción de sismos y medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
+
+
+Un sismo es un fenómeno natural que se produce cuando se libera una gran cantidad de energía acumulada en la corteza terrestre, provocando una vibración o movimiento de la misma, esta liberación de energía suele ser de tanta magnitud que ocaciona graves consecuencias, tanto para las personas como para las estructuras y la infraestructura. Algunas de las consecuencias más comunes incluyen:
+
+Daños a edificios y estructuras: los sismos pueden causar daños graves a los edificios y otras estructuras, como puentes y carreteras. Estos daños pueden variar desde grietas y daños menores hasta colapsos completos.
+
+Lesiones y pérdidas humanas: los sismos pueden provocar lesiones y pérdidas humanas, ya sea directamente por la sacudida sísmica o como resultado de los daños a las estructuras.
+
+Tsunamis: los sismos submarinos pueden provocar tsunamis, que son olas gigantes que pueden causar daños graves en las zonas costeras.
+
+Interrupción de servicios básicos: los sismos pueden interrumpir los servicios básicos, como el suministro de agua, electricidad y gas. Esto puede afectar gravemente la capacidad de las personas para mantenerse a salvo y recuperarse después del sismo.
+
+Daños económicos: los sismos pueden tener un impacto significativo en la economía, especialmente en las áreas afectadas. Los daños a la infraestructura y los edificios pueden resultar en la pérdida de empleos y la interrupción de la producción y los servicios.
+
+Problemática
+La problemática principal radica en la imposibilidad de prevenir los sismos, pero es posible generar conciencia en la sociedad sobre cómo mitigar los peligros asociados a estos eventos.Es para eso que se creó el Proyecto 'QUAKE ALERT' cuyo objetivo principal es crear un Modelo de Clasificación de Sismos y alerta de prevención dependiendo de su intensidad.
+
+Objetivo
+El objetivo es poder informar donde y cuando ocurrieron los sismos, a la vez poder clasificarlos y mostrar medidas de prevención acordes a la situación.
+Esta información se mostrara atraves de una interfaz gráfica para que los interesados puedan interactuar con lo que mas les interese. 
+
+Alcance
+El alcance del proyecto incluye:
+Desarrollo de un modelo de aprendizaje automático no supervisado para clasificar los eventos sísmicos según su nivel de peligrosidad.
+
+Creación de una base de datos automatizada que se actualiza constantemente con datos sísmicos de EE.UU., Japón y Chile.
+
+Presentación visual de las métricas y estadísticas recopiladas, utilizando gráficos, tablas y visualizaciones interactivas.
+
+
+
+Actualización periódica de los datos para mantener la información siempre oportuna y reflejar los cambios en la actividad sísmica.
+Implementación de funciones de búsqueda y filtrado para permitir a los usuarios explorar datos específicos según sus necesidades e intereses.
+
+
 
 En este repositorio, encontrará los siguientes elementos:
 
@@ -34,7 +69,6 @@ El equipo detrás del Sistema de Alerta Sísmica está formado por:
 
 - [Eduardo Rubén Dominguez](https://github.com/edwardhight52391558) Data Engineer - Machine Learning
 - [Sebastian Gomez Estrada](https://github.com/Mezgo?tab=repositories) Data Analyst - Data Engineer
-- [Diego Mauro Daniel Maneyro](https://github.com/diegomaneyro) Data Engineer
 - [Beatriz Rodriguez](https://github.com/Bearodriguez2022) Data Engineer - Data Analyst
 - [Gonzalo Carballo](https://github.com/gonzalocba) Functional analysis - Bi
 
