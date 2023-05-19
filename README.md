@@ -4,7 +4,7 @@
 <img src="https://github.com/diegomaneyro/Alerta-Sismica/blob/main/imagenes/sismo_portada.webp"  height=250> 
 </p>
 
-## Quake Alert es un proyecto que busca crear un sistema efectivo y seguro de clasificacción de sismos y medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
+## Quake Alert es un proyecto que busca crear un sistema efectivo de medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
 
 
 Un sismo es un fenómeno natural que se produce cuando se libera una gran cantidad de energía acumulada en la corteza terrestre, provocando una vibración o movimiento de la misma, esta liberación de energía suele ser de tanta magnitud que ocaciona graves consecuencias, tanto para las personas como para las estructuras y la infraestructura. Algunas de las consecuencias más comunes incluyen:
