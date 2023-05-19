@@ -1,0 +1,60 @@
+
+
+>
+MUY IMPORTANTE
+PRIMERO
+pasar csv con campos completos 
+el csv se denomina chile.csv y tiene las columnas 'magnitud', 'longitud', 'latitud', 'profundidad', 'fecha_local','hora_local'
+-
+solicitar que explique el codigo
+necesito me expliques como funciona este codigo en cada bloque, con la informacion que sea relevante para entender el funcionamiento,
+-
+diagrama de flujo o diagrama de estructura
+puedes representar un diagrama de flujo o diagrama de estructura de este codigo,
+-
+SEGUNDO
+funciones codigo mas legible,control errores
+indicame si este codigo es conveniente crear funciones para su optimizacion , este codigo lo insertare en streamlit
+-
+TERCERO
+generar codigo streamlit con estructura 
+2 columnas de col1 0.65 y col2 0.35 ,
+en la col1 de 0.65 ,  Bloque 3: Gráfico de barras
+en la col2 de 0.35 , Bloque 4: Generación del KPI
+-
+CUARTO 
+indicar ultimas versiones de libreria, lenguaje etc 
+
+
+-
+PUNTOS CONTROL
+explicar codigo, iteracion
+solicitar debug en errores 
+identificar lineas 
+
+-
+ULTIMO
+solicitar que explique el codigo funcionando OK
+
+IDENTACION
+> TAB 
+< SHIFT+TAB 
+
+>
+Entendido. A continuación, te mostraré los pasos de depuración que puedes seguir para encontrar la solución a tu problema:
+
+1. Identificar el punto en el código donde se produce el error: Revisa el traceback del error para identificar la línea de código que genera la excepción. Esto te ayudará a entender en qué parte del código se está produciendo el problema.
+
+2. Verificar los datos de entrada: Asegúrate de que los datos de entrada, como los nombres de las columnas, existan y sean correctos. En este caso, verifica que la columna 'profundidad_categoria' esté presente en el DataFrame 'df'.
+
+3. Imprimir los valores intermedios: Inserta instrucciones de impresión en diferentes puntos del código para mostrar los valores de las variables relevantes. Puedes imprimir, por ejemplo, el contenido de 'df' y 'df_po' para asegurarte de que los datos se cargaron correctamente.
+
+4. Comprobar los tipos de datos: Verifica que los tipos de datos de las columnas sean correctos. Puedes imprimir los tipos de datos de las columnas de 'df' y 'df_po' utilizando el atributo 'dtypes'.
+
+5. Revisar la manipulación de los DataFrames: Asegúrate de que estás accediendo a las columnas correctas en los DataFrames y de que los nombres de las columnas coincidan. Si es necesario, utiliza instrucciones de impresión para verificar los valores de las columnas en cada paso del proceso.
+
+6. Solucionar el error: Una vez identificado el origen del error y revisados los datos y las operaciones realizadas, podrás determinar la causa del problema y corregirlo. Puede ser necesario realizar cambios en la selección de columnas, la manipulación de los datos o la corrección de los nombres de las columnas.
+
+Recuerda que en cada paso puedes utilizar instrucciones de impresión para mostrar los valores de las variables y comprender mejor el flujo del programa y el estado de los datos en cada momento.
+
+Si sigues teniendo problemas o necesitas más ayuda, no dudes en proporcionarme los resultados devueltos y en qué punto del código se producen, y estaré encantado de ayudarte a encontrar una solución.
