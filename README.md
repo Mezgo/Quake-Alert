@@ -1,7 +1,7 @@
 # Quake Alert
  
 <p align="center">
-<img src="https://github.com/diegomaneyro/Alerta-Sismica/blob/main/imagenes/sismo_portada.webp"  height=250> 
+<img src="imagenes/logo.PNG"  height=250> 
 </p>
 
 ## Quake Alert es un proyecto que busca crear un sistema efectivo de medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
