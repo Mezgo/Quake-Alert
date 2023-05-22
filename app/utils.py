@@ -10,8 +10,10 @@ from geopy.geocoders import Nominatim
 PROJECT_ID = 'quake-alert-e44c3'
 BUCKET = 'buket-geodata'
 
+storage_client = storage.Client(project=PROJECT_ID)
 
-def authenticate_implicit_with_adc(project_id):
+
+def authenticate_implicit_with_adc(client):
     """
     When interacting with Google Cloud Client libraries, the library can auto-detect the
     credentials to use.
@@ -30,8 +32,7 @@ def authenticate_implicit_with_adc(project_id):
     # *NOTE*: Replace the client created below with the client required for your application.
     # Note that the credentials are not specified when constructing the client.
     # Hence, the client library will look for credentials using ADC.
-    storage_client = storage.Client(project=project_id)
-    buckets = storage_client.list_buckets()
+    buckets = client.list_buckets()
     print("Buckets:")
     for bucket in buckets:
         print(bucket.name)
@@ -40,10 +41,8 @@ def authenticate_implicit_with_adc(project_id):
 
 def autenticar():
     """activa la funcion que autentica al usuaio"""
-    authenticate_implicit_with_adc(PROJECT_ID)
+    authenticate_implicit_with_adc(storage_client)
 
-
-client = storage.Client()
 
 
 class EEUU:
@@ -54,7 +53,7 @@ class EEUU:
         history = requests.get(history).json()
         history = pd.json_normalize(history, record_path =['features'])
         history = history.to_json(orient = 'records')
-        with open('data/datos_eeuu.json', 'w') as f: f.write(history)
+        with open('data/datos_eeuu.json', 'w') as f:f.write(history)
 
         return f
 
@@ -376,9 +375,8 @@ def llenar_bucket():
 def get_json_gcs(bucket_name, file_name):
     """lee un archivo json del bucket y
     lo retorna como DataFrame"""
-
     # get bucket with name
-    BUCKET = client.get_bucket(bucket_name)
+    BUCKET = storage_client.get_bucket(bucket_name)
 
     # get the blob
     blob = BUCKET.get_blob(file_name)
@@ -390,6 +388,21 @@ def get_json_gcs(bucket_name, file_name):
 
     return df
 
+
+def get_clean_data(file_name):
+
+    bucket = storage_client.bucket(BUCKET)
+
+    # Construct a client side representation of a blob.
+    # Note `Bucket.blob` differs from `Bucket.get_blob` as it doesn't retrieve
+    # any content from Google Cloud Storage. As we don't need additional data,
+    # using `Bucket.blob` is preferred here.
+    blob = bucket.blob(file_name)
+    contents = blob.download_as_string()
+    file_data = json.loads(contents.decode('utf-8'))
+    file_data = json.dumps(file_data)
+    df = pd.read_json(file_data)
+    return df
 
 ###############################################################################
 ###############################################################################
@@ -466,17 +479,17 @@ def limpieza_eeuu():
 # ACCEDER A LOS DATOS LIMPIOS
 # JAPON
 def get_japon_limpio():
-    """extrae los datos limpio de japon y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_japon_etl.json')
+    """Extrae los datos limpios de japon y los devuelve como dataframe"""
+    return get_clean_data('datos_japon_etl.json')
 
 
 # CHILE
 def get_chile_limpio():
-    """extrae los datos limpio de chile y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_chile_etl.json')
+    """Extrae los datos limpios de chile y los devuelve como dataframe"""
+    return get_clean_data('datos_chile_etl.json')
 
 
 # EEUU
 def get_eeuu_limpio():
-    """extrae los datos limpio de eeuu y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_eeuu_etl.json')
+    """Extrae los datos limpios de eeuu y los devuelve como dataframe"""
+    return get_clean_data('datos_eeuu_etl.json')
