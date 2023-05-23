@@ -49,7 +49,7 @@ class EEUU:
 
     def history(self):
 
-        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2022-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=50&minlatitude=24.6&maxlongitude=-65&minlongitude=-125&minmagnitude=1&orderby=time-asc'
+        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2023-05-11%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=50&minlatitude=24.6&maxlongitude=-65&minlongitude=-125&minmagnitude=1&orderby=time-asc'
         history = requests.get(history).json()
         history = pd.json_normalize(history, record_path =['features'])
         history = history.to_json(orient = 'records')
@@ -75,7 +75,7 @@ class EEUU:
         return
 
     def etl(self, df):
-        eeuu = pd.read_json('data/datos_eeuu.json')
+        eeuu = df
         columnas = [p.replace('properties.', '') for p in eeuu.columns.to_list()]
         new_names = dict(zip(eeuu.columns.to_list(), columnas))
         eeuu = eeuu.rename(new_names, axis='columns')
@@ -118,18 +118,21 @@ class EEUU:
         eeuu.drop('place',axis=1,inplace=True)
         def codigo_region(row):
             point = row.latitud,row.longitud
-            geolocator = Nominatim(user_agent='Google Maps') 
+            geolocator = Nominatim(user_agent='Google Maps')
             location = geolocator.reverse(point)
             try:
                 location.raw['address']['ISO3166-2-lvl4']
             except:
-                row['codigo_region'] = ' region'
+                row['codigo_region'] = 'region'
             else:
                 location = location.raw['address']['ISO3166-2-lvl4']
                 row['codigo_region'] = str(location)
             return row
-        eeuu.head.apply(codigo_region, axis=1)
-        eeuu = eeuu[['fecha_local','hora_local','magnitud','profundidad','latitud','longitud','distancia','codigo_region']]
+        eeuu.apply(codigo_region, axis=1)
+        eeuu = eeuu[['fecha_local', 'hora_local',
+                     'magnitud', 'profundidad',
+                     'latitud', 'longitud',
+                     'distancia', 'codigo_region']]
         eeuu['fecha_local'] = eeuu['fecha_local'].apply(lambda x: str(x))
         eeuu_json = eeuu.to_json(orient = 'records')
         with open('data/datos_eeuu_etl.json', 'w') as f: f.write(eeuu_json)
@@ -144,7 +147,7 @@ class Chile:
 
     def history(self):
 
-        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2022-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=-17.5&minlatitude=-56.0&maxlongitude=-66.0&minlongitude=-81.0&minmagnitude=1&orderby=time-asc'
+        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2023-03-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=-17.5&minlatitude=-56.0&maxlongitude=-66.0&minlongitude=-81.0&minmagnitude=1&orderby=time-asc'
         history = requests.get(history).json()
         history = pd.json_normalize(history, record_path =['features'])
         history = history.to_json(orient = 'records')
@@ -170,7 +173,7 @@ class Chile:
         return
 
     def etl(self, df):
-        chile = pd.read_json('data/datos_chile.json')
+        chile = df
         columnas = [p.replace('properties.', '') for p in chile.columns.to_list()]
         new_names = dict(zip(chile.columns.to_list(), columnas))
         chile = chile.rename(new_names, axis='columns')
@@ -212,7 +215,7 @@ class Chile:
         chile.rename({'dist':'distancia'}, axis='columns', inplace=True)
         chile.drop('place',axis=1,inplace=True)
         def codigo_region(row):
-            point = row.latitud,row.longitude
+            point = row.latitud,row.longitud
             geolocator = Nominatim(user_agent='Google Maps') 
             location = geolocator.reverse(point)
             try:
@@ -331,6 +334,31 @@ def upload_limpio(file):
     upload_blob(BUCKET, file, name)
 
 
+def delete_blob(blob_name):
+    """Deletes a blob from the bucket."""
+    # bucket_name = "your-bucket-name"
+    # blob_name = "your-object-name")
+
+    bucket = storage_client.bucket(BUCKET)
+    blob = bucket.blob(blob_name)
+    generation_match_precondition = None
+
+    # Optional: set a generation-match precondition to avoid potential race conditions
+    # and data corruptions. The request to delete is aborted if the object's
+    # generation number does not match your precondition.
+    blob.reload()  # Fetch blob metadata to use in generation_match_precondition.
+    generation_match_precondition = blob.generation
+
+    blob.delete(if_generation_match=generation_match_precondition)
+
+    print(f"Blob {blob_name} deleted.")
+
+
+def borrar_archivo(file):
+    """activa la funcion que borra un archivo dado"""
+    delete_blob(file)
+
+
 ###############################################################################
 ###############################################################################
 ###############################################################################
@@ -349,21 +377,35 @@ def upload_to_bucket():
     file_japon = japon.history().name
     name = file_japon.split('/')[-1]
     print(name)
-    upload_blob(BUCKET, file_japon, name)
+
+    try:
+        upload_blob(BUCKET, file_japon, name)
+    except:
+        borrar_archivo('datos_japon.json')
+        upload_blob(BUCKET, file_japon, name)
 
     # Carga de datos de eeuu
     eeuu = EEUU()
     file_eeuu = eeuu.history().name
     name = file_eeuu.split('/')[-1]
     print(name)
-    upload_blob(BUCKET, file_eeuu, name)
+    try:
+        upload_blob(BUCKET, file_eeuu, name)
+    except:
+        borrar_archivo('datos_eeuu.json')
+        upload_blob(BUCKET, file_eeuu, name)
 
     # Carga de datos de chile
     chile = Chile()
     file_chile = chile.history().name
     name = file_chile.split('/')[-1]
     print(name)
-    upload_blob(BUCKET, file_chile, name)
+    try:
+        upload_blob(BUCKET, file_chile, name)
+    except:
+        borrar_archivo('datos_chile.json')
+        upload_blob(BUCKET, file_chile, name)
+
 
 
 def llenar_bucket():
@@ -413,15 +455,18 @@ def get_clean_data(file_name):
 # LIMPIEZA DE JAPON
 def limpieza_japon():
     """lanza la limpieza de los datos de japon y los sube al bucket"""
+    print('obteniendo info')
     japon_raw = get_json_gcs(BUCKET, "datos_japon.json")
+    print('completado')
 
     # Enviar a limpieza
-
+    print('limpiando info')
     japon = Japon()
     file_japon = japon.etl(japon_raw).name
+    print('completado')
 
     # subir el archivo a bucket
-
+    print('subiendo info')
     upload_limpio(file_japon)
 
 
@@ -435,16 +480,19 @@ def limpieza_chile():
     """lanza la limpieza de los datos de chile y los sube al bucket"""
 
     # se obtiene el archivo de los datos de chile sin limpiar
-
+    print('obteniendo info')
     chile_raw = get_json_gcs(BUCKET, "datos_chile.json")
-
+    print('raw extraido')
     # Enviar a limpieza
 
+    print('limpiando info')
     chile = Chile()
     file_chile = chile.etl(chile_raw).name
+    print('Informacion limpiada')
 
     # subir el archivo a bucket
 
+    print('subiendo info')
     upload_limpio(file_chile)
 
 
@@ -458,16 +506,18 @@ def limpieza_eeuu():
     """lanza la limpieza de los datos de eeuu y los sube al bucket"""
 
     # se obtiene el archivo de los datos de eeuu sin limpiar
-
+    print('obteniendo info')
     eeuu_raw = get_json_gcs(BUCKET, "datos_eeuu.json")
+    print('completado')
 
     # Enviar a limpieza
-
+    print('limpiando info')
     eeuu = EEUU()
     file_eeuu = eeuu.etl(eeuu_raw).name
+    print('completado')
 
     # subir el archivo a bucket
-
+    print('subiendo info')
     upload_limpio(file_eeuu)
 
 
