@@ -10,14 +10,14 @@ utils.autenticar()
 #     utils.borrar_archivo('datos_japon_etl.json')
 #     utils.limpieza_japon()
 
-# try:
-#     utils.limpieza_chile()
-# except:
-#     utils.borrar_archivo('datos_chile_etl.json')
-#     utils.limpieza_chile()
-
 try:
-    utils.limpieza_eeuu()
+    utils.limpieza_chile()
 except:
-    utils.borrar_archivo('datos_eeuu_etl.json')
-    utils.limpieza_eeuu()
+    utils.borrar_archivo('datos_chile_etl.json')
+    utils.limpieza_chile()
+
+# try:
+#     utils.limpieza_eeuu()
+# except:
+#     utils.borrar_archivo('datos_eeuu_etl.json')
+#     utils.limpieza_eeuu()

@@ -1,0 +1,181 @@
+/* Estilos personalizados */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.css-z5fcl4 {
+    width: 100%;
+    padding: 0rem 1rem 10rem;
+    min-width: auto;
+    max-width: initial;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    position: relative;
+}
+
+.titulo_main {
+    font-size: 48px;
+    text-align: center;
+    /* Otros estilos que desees aplicar */
+}
+
+.texto_main {
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid #e11e30; /* Establecer el color del borde */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 50px;
+    /* Otros estilos que desees aplicar */
+}
+
+
+
+.encabezado {
+    display: flex;
+    align-items: center;
+}
+
+.encabezado-logo {
+    width: 100px;
+    height: auto;
+}
+
+.encabezado-texto {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 10px 7px 20px 0px;
+    /* otros estilos que desees aplicar */
+}
+
+/* FORMATO KPI */
+.card {
+    /* Estilos para la tarjeta */
+    background-color: #F8F8F8;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex; /* Utilizamos Flexbox */
+    align-items: center; /* Centramos verticalmente los elementos */
+  }
+  
+  .kpi-title {
+    /* Estilos para el título del KPI */
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 24px;
+    flex-grow: 1; /* Ocupa el espacio restante en el contenedor */
+  }
+  
+  .kpi-value {
+    /* Estilos para el valor del KPI */
+    text-align: right;
+    color: #e11e30;
+    font-size: 80px;
+  }
+/* FIN FORMATO */
+ 
+ 
+
+/* FORMATO KPI-1 */
+.card_1 {
+    /* Estilos para la tarjeta */
+    background-color: #F8F8F8;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    /*display: flex; /* Utilizamos Flexbox */
+    align-items: center; /* Centramos verticalmente los elementos */
+  }
+  
+  .kpi-title_1 {
+    /* Estilos para el título del KPI */
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 24px;
+    flex-grow: 1; /* Ocupa el espacio restante en el contenedor */
+  }
+  
+  .kpi-value_1 {
+    /* Estilos para el valor del KPI */
+    text-align: right;
+    color: #e11e30;
+    font-size: 80px;
+  }
+
+
+/* IMAGENES */
+
+.img_metrica {
+    width: 450px;
+    height: 194px;
+    margin: 10px;
+    border: 1px solid #e11e30;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.img_medidas {
+    width: 800px;
+    height: 782px;
+    margin: 10px;
+    border: 1px solid #e11e30;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        /* Otros estilos que desees aplicar */
+  }
+
+/* FIN IMAGENES */
+
+
+.cuerpo_titulo {
+    font-size: 34px;
+    display: flex;
+    margin-top: 20px;
+}
+
+.cuerpo_titulo_head {
+    font-size: 34px;
+    display: flex;
+    margin-top: 20px;
+}
+
+.cuerpo {
+    font-size: 16px;
+    display: flex;
+    margin-top: 20px;
+}
+
+.columna1 {
+    width: 50%;
+    padding-right: 20px;
+}
+
+.columna2 {
+    width: 50%;
+    padding-left: 20px;
+}
+
+.tabla {
+    height: 300px;
+}
+
+.pie {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.espacio_footer {
+    height: 30px;
+}
+
+.espacio_conclusion {
+    height: 100px;
+}
+
+.texto_conclusion {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+}

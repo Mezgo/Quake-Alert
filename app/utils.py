@@ -118,21 +118,18 @@ class EEUU:
         eeuu.drop('place',axis=1,inplace=True)
         def codigo_region(row):
             point = row.latitud,row.longitud
-            geolocator = Nominatim(user_agent='Google Maps')
+            geolocator = Nominatim(user_agent='Google Maps') 
             location = geolocator.reverse(point)
             try:
                 location.raw['address']['ISO3166-2-lvl4']
             except:
-                row['codigo_region'] = 'region'
+                row['codigo_region'] = ' region'
             else:
                 location = location.raw['address']['ISO3166-2-lvl4']
                 row['codigo_region'] = str(location)
             return row
         eeuu.apply(codigo_region, axis=1)
-        eeuu = eeuu[['fecha_local', 'hora_local',
-                     'magnitud', 'profundidad',
-                     'latitud', 'longitud',
-                     'distancia', 'codigo_region']]
+        eeuu = eeuu.loc['fecha_local','hora_local','magnitud','profundidad','latitud','longitud','distancia','codigo_region']
         eeuu['fecha_local'] = eeuu['fecha_local'].apply(lambda x: str(x))
         eeuu_json = eeuu.to_json(orient = 'records')
         with open('data/datos_eeuu_etl.json', 'w') as f: f.write(eeuu_json)
@@ -227,12 +224,38 @@ class Chile:
                 row['codigo_region'] = str(location)
             return row
         chile = chile.apply(codigo_region, axis=1)
-        
+
         chile = chile[['fecha_local','hora_local','magnitud','profundidad','latitud','longitud','distancia','codigo_region']]
+        chile = chile[chile.codigo_region.str.contains('Fuera de region|CL', na=False)]
         chile['fecha_local'] = chile['fecha_local'].apply(lambda x: str(x))
-        
-        chile_json = chile.to_json(orient = 'records')
-        with open('data/datos_chile_etl.json', 'w') as f: f.write(chile_json)
+
+        chile_demograficos = pd.read_csv('data/chile_poblacion.csv')
+
+        chile_join = pd.merge(chile, chile_demograficos,
+                              left_on=['codigo_region'],
+                              right_on=['codigo_region'],
+                              how='left')
+
+        chile_join.rename({'date': 'fecha_local', 'time': 'hora_local',
+                           'magnitude': 'magnitud', 'depht': 'profundidad',
+                           'latitude': 'latitud', 'longitude': 'longitud',
+                           'poblacion_y': 'poblacion'},
+                          axis='columns', inplace=True)
+
+        def replace_0(row):
+            try:
+                int(row['poblacion'])
+            except:
+                row['poblacion'] = 0
+            else:
+                row['poblacion'] = int(row['poblacion'])
+            return row
+
+        chile_join = chile_join.apply(replace_0, axis=1)
+
+        chile_json = chile_join.to_json(orient='records')
+        with open('data/datos_chile_etl.json', 'w') as f:
+            f.write(chile_json)
 
         return f
 
