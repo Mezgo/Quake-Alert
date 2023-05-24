@@ -77,22 +77,11 @@ El equipo del departamento de datos de la **ONG Quake Alert** está formado por:
 - [Gonzalo Carballo](https://github.com/gonzalocba) Functional analysis - Bi
 
 
-## Flujo del Dato
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
-
-## Video
-
-En este video se puede observar el funcionamiento del proyecto
-
-
 ## Skills
 
 Herramientas utilizadas durante este proyecto 
 
 [![MIT License](https://img.shields.io/badge/Python-3.11-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GPLv3 License](https://img.shields.io/badge/Apache-Airflow-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/Google-Cloud-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 [![AGPL License](https://img.shields.io/badge/Git-Bash-red.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
