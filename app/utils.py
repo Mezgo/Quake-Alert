@@ -5,12 +5,15 @@ import datetime
 import json
 #import google.auth
 from google.cloud import storage
+from geopy.geocoders import Nominatim
 
 PROJECT_ID = 'quake-alert-e44c3'
 BUCKET = 'buket-geodata'
 
+storage_client = storage.Client(project=PROJECT_ID)
 
-def authenticate_implicit_with_adc(project_id):
+
+def authenticate_implicit_with_adc(client):
     """
     When interacting with Google Cloud Client libraries, the library can auto-detect the
     credentials to use.
@@ -29,8 +32,7 @@ def authenticate_implicit_with_adc(project_id):
     # *NOTE*: Replace the client created below with the client required for your application.
     # Note that the credentials are not specified when constructing the client.
     # Hence, the client library will look for credentials using ADC.
-    storage_client = storage.Client(project=project_id)
-    buckets = storage_client.list_buckets()
+    buckets = client.list_buckets()
     print("Buckets:")
     for bucket in buckets:
         print(bucket.name)
@@ -39,21 +41,19 @@ def authenticate_implicit_with_adc(project_id):
 
 def autenticar():
     """activa la funcion que autentica al usuaio"""
-    authenticate_implicit_with_adc(PROJECT_ID)
+    authenticate_implicit_with_adc(storage_client)
 
-
-client = storage.Client()
 
 
 class EEUU:
 
     def history(self):
 
-        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2023-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=50&minlatitude=24.6&maxlongitude=-65&minlongitude=-125&minmagnitude=1&orderby=time-asc'
+        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2022-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=50&minlatitude=24.6&maxlongitude=-65&minlongitude=-125&minmagnitude=1&orderby=time-asc'
         history = requests.get(history).json()
         history = pd.json_normalize(history, record_path =['features'])
         history = history.to_json(orient = 'records')
-        with open('data/datos_eeuu.json', 'w') as f: f.write(history)
+        with open('data/datos_eeuu.json', 'w') as f:f.write(history)
 
         return f
 
@@ -96,10 +96,41 @@ class EEUU:
         eeuu['time_hour'] = eeuu.time.dt.time
         eeuu['time_hour'] = eeuu['time_hour'].apply(lambda x: x.replace(microsecond=0))
         eeuu.drop('time', axis='columns', inplace=True)
-        eeuu.rename({'mag':'magnitude', 'time_hour':'time'}, axis='columns', inplace=True)
-        eeuu.drop('place', axis='columns', inplace=True)
-        eeuu = eeuu[['date','time',	'magnitude','depth','latitude','longitude']]
-        eeuu['date'] = eeuu['date'].apply(lambda x: str(x))
+        eeuu.rename({'mag':'magnitud', 'time_hour':'hora_local','date':'fecha_local','depth':'profundidad','latitude':'latitud','longitude':'longitud'}, axis='columns', inplace=True)
+        def separate_date(row):
+            try:
+                row.place.split("km")
+            except:
+                row['distancia'] = 100000
+            else:
+                row['distancia'] = row.place.split("km")[0]
+            return row
+        eeuu = eeuu.apply(separate_date, axis=1)
+        def replace_as_0(row):
+            try:
+                int(row['distancia'])
+            except:
+                row['distancia'] = 100000
+            else:
+                row['distancia'] = int(row['distancia'])
+            return row
+        eeuu = eeuu.apply(replace_as_0, axis=1)
+        eeuu.drop('place',axis=1,inplace=True)
+        def codigo_region(row):
+            point = row.latitud,row.longitud
+            geolocator = Nominatim(user_agent='Google Maps') 
+            location = geolocator.reverse(point)
+            try:
+                location.raw['address']['ISO3166-2-lvl4']
+            except:
+                row['codigo_region'] = ' region'
+            else:
+                location = location.raw['address']['ISO3166-2-lvl4']
+                row['codigo_region'] = str(location)
+            return row
+        eeuu.head.apply(codigo_region, axis=1)
+        eeuu = eeuu[['fecha_local','hora_local','magnitud','profundidad','latitud','longitud','distancia','codigo_region']]
+        eeuu['fecha_local'] = eeuu['fecha_local'].apply(lambda x: str(x))
         eeuu_json = eeuu.to_json(orient = 'records')
         with open('data/datos_eeuu_etl.json', 'w') as f: f.write(eeuu_json)
 
@@ -113,7 +144,7 @@ class Chile:
 
     def history(self):
 
-        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2023-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=-17.5&minlatitude=-56.0&maxlongitude=-66.0&minlongitude=-81.0&minmagnitude=1&orderby=time-asc'
+        history = 'https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=2022-01-01%2000:00:00&endtime=2023-05-11%2023:59:59&maxlatitude=-17.5&minlatitude=-56.0&maxlongitude=-66.0&minlongitude=-81.0&minmagnitude=1&orderby=time-asc'
         history = requests.get(history).json()
         history = pd.json_normalize(history, record_path =['features'])
         history = history.to_json(orient = 'records')
@@ -161,10 +192,42 @@ class Chile:
         chile['time_hour'] = chile.time.dt.time
         chile['time_hour'] = chile['time_hour'].apply(lambda x: x.replace(microsecond=0))
         chile.drop('time', axis='columns', inplace=True)
-        chile.rename({'mag':'magnitude', 'time_hour':'time'}, axis='columns', inplace=True)
-        chile.drop('place', axis='columns', inplace=True)
-        chile = chile[['date','time',	'magnitude','depth','latitude','longitude']]
-        chile['date'] = chile['date'].apply(lambda x: str(x))
+        chile.rename({'mag':'magnitud', 'time_hour':'hora_local','date':'fecha_local','depth':'profundidad','latitude':'latitud','longitude':'longitud'}, axis='columns', inplace=True)
+
+        def separate_date(row):
+            part = row.place.split(" ")
+            row['distancia'] = part[0]
+            return row
+        chile = chile.apply(separate_date, axis=1)
+        def replace_as_0(row):
+            try:
+                int(row['distancia'])
+            except:
+                row['dist'] = 100000
+            else:
+                row['dist'] = int(row['distancia'])
+            return row
+        chile = chile.apply(replace_as_0, axis=1)
+        chile.drop('distancia',axis=1,inplace=True)
+        chile.rename({'dist':'distancia'}, axis='columns', inplace=True)
+        chile.drop('place',axis=1,inplace=True)
+        def codigo_region(row):
+            point = row.latitud,row.longitude
+            geolocator = Nominatim(user_agent='Google Maps') 
+            location = geolocator.reverse(point)
+            try:
+                location.raw['address']['ISO3166-2-lvl4']
+            except:
+                row['codigo_region'] = 'Fuera de region'
+            else:
+                location = location.raw['address']['ISO3166-2-lvl4']
+                row['codigo_region'] = str(location)
+            return row
+        chile = chile.apply(codigo_region, axis=1)
+        
+        chile = chile[['fecha_local','hora_local','magnitud','profundidad','latitud','longitud','distancia','codigo_region']]
+        chile['fecha_local'] = chile['fecha_local'].apply(lambda x: str(x))
+        
         chile_json = chile.to_json(orient = 'records')
         with open('data/datos_chile_etl.json', 'w') as f: f.write(chile_json)
 
@@ -178,7 +241,7 @@ class Japon:
 
     def history(self):
 
-        history = "https://service.iris.edu/fdsnws/event/1/query?starttime=2023-01-01T00:00:00&&endtime=2023-05-11T23:59:59&orderby=time&format=geocsv&maxlat=47.587&minlon=128.288&maxlon=157.029&minlat=30.234&nodata=404"
+        history = "https://service.iris.edu/fdsnws/event/1/query?starttime=2022-01-01T00:00:00&&endtime=2023-05-11T23:59:59&orderby=time&format=geocsv&maxlat=47.587&minlon=128.288&maxlon=157.029&minlat=30.234&nodata=404"
         history = pd.read_csv(history, sep='|', skiprows=4)
         history = history[history.EventLocationName.str.contains('JAPAN')]
         history = history.sort_values('Time')
@@ -312,9 +375,8 @@ def llenar_bucket():
 def get_json_gcs(bucket_name, file_name):
     """lee un archivo json del bucket y
     lo retorna como DataFrame"""
-
     # get bucket with name
-    BUCKET = client.get_bucket(bucket_name)
+    BUCKET = storage_client.get_bucket(bucket_name)
 
     # get the blob
     blob = BUCKET.get_blob(file_name)
@@ -326,6 +388,21 @@ def get_json_gcs(bucket_name, file_name):
 
     return df
 
+
+def get_clean_data(file_name):
+
+    bucket = storage_client.bucket(BUCKET)
+
+    # Construct a client side representation of a blob.
+    # Note `Bucket.blob` differs from `Bucket.get_blob` as it doesn't retrieve
+    # any content from Google Cloud Storage. As we don't need additional data,
+    # using `Bucket.blob` is preferred here.
+    blob = bucket.blob(file_name)
+    contents = blob.download_as_string()
+    file_data = json.loads(contents.decode('utf-8'))
+    file_data = json.dumps(file_data)
+    df = pd.read_json(file_data)
+    return df
 
 ###############################################################################
 ###############################################################################
@@ -402,17 +479,17 @@ def limpieza_eeuu():
 # ACCEDER A LOS DATOS LIMPIOS
 # JAPON
 def get_japon_limpio():
-    """extrae los datos limpio de japon y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_japon_etl.json')
+    """Extrae los datos limpios de japon y los devuelve como dataframe"""
+    return get_clean_data('datos_japon_etl.json')
 
 
 # CHILE
 def get_chile_limpio():
-    """extrae los datos limpio de chile y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_chile_etl.json')
+    """Extrae los datos limpios de chile y los devuelve como dataframe"""
+    return get_clean_data('datos_chile_etl.json')
 
 
 # EEUU
 def get_eeuu_limpio():
-    """extrae los datos limpio de eeuu y los devuelve como dataframe"""
-    return get_json_gcs(BUCKET, 'datos_eeuu_etl.json')
+    """Extrae los datos limpios de eeuu y los devuelve como dataframe"""
+    return get_clean_data('datos_eeuu_etl.json')

@@ -1,0 +1,16 @@
+﻿region,codigo_region,capital,area,poblacion,densidad_poblacion
+Araucania,CL-AR,Temuco,31 842,1 024 029,"32,16"
+Arica y Parinacota,CL-AP,Arica,16 873,257 722,"15,27"
+Atacama,CL-AT,Copiapo,75 177,318 004,"4,23"
+Aysen,CL-AI,Coihaique,108 496,108 047,1
+Bernardo O'Higgins,CL-LI,Rancagua,16 387,1 009 552,"61,61"
+Biobio,CL-BI,Concepcion,23 890,1 676 269,"70,17"
+Coquimbo,CL-CO,La Serena,40 580,858 769,"21,16"
+Los Lagos,CL-LL,Puerto Montt,48 539,902 510,"18,59"
+Los Rios,CL-LR,Valdivia,18 429,409 559,"22,22"
+Magallanes,CL-MA,Punta Arenas,116 438,181 143,"1,56"
+Maule,CL-ML,Talca,30 296,1 153 043,"38,06"
+Nuble,CL-NU,Chillan,12 610,517 060,41
+Region Metropolitana Santiago,CL-RM,Santiago,15 403,8 310 984,"539,57"
+Tarapaca,CL-TA,Iquique,42 226,396 697,"9,39"
+Valparaiso,CL-VS,Valparaiso,16 417,1 995 538,"121,55"
