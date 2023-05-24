@@ -4,7 +4,7 @@
 <img src="imagenes/logo.PNG"  height=250> 
 </p>
 
-## Quake Alert es un proyecto que busca crear un sistema efectivo de medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
+## Quake Alert es una ONG que busca crear un sistema efectivo de medidas de prevención a tomar por la sociedad dependiendo de la gravedad de sismo .
 
 
 Un sismo es un fenómeno natural que se produce cuando se libera una gran cantidad de energía acumulada en la corteza terrestre, provocando una vibración o movimiento de la misma, esta liberación de energía suele ser de tanta magnitud que ocaciona graves consecuencias, para las estructuras, la infraestructura y lo peor de todo perdidas humanas.
@@ -38,7 +38,7 @@ Esta información se mostrara através de una interfaz gráfica para que los int
 
 El alcance del proyecto incluye:
 
-Analisis de datos sísmicos de Chile para comprender la peligrosidad de los sismos, zonas mas afectadas, zonas de evacuación.
+Analisis de datos sísmicos de Chile para comprender la peligrosidad de los sismos intensidad que afectan a la zona, horarios y epocas del año que es mas común que ocurran los siniestros, analisis de epicentros, estudios de mitos.
 
 Visualizaciones interactivas de los datos mediante implementación de funciones de búsqueda y filtrado para permitir a los usuarios explorar datos específicos según sus necesidades e intereses asi poder consultar el comportamiento de los sismos en el tiempo, encontrar patrones comunes y poder generar medidas preventivas adecuadas para cada región de Chile. Actualización periódica de los datos para mantener la información siempre oportuna y reflejar los cambios de la actividad sísmica.
 
@@ -56,14 +56,12 @@ Aca queda información  detallada que sustenta el proyecto:
 
 2. **`datos`**: Datasets de tres naciones que se monitorean, utilizado para entrenar el algoritmo de aprendizaje automático. En este caso, el conjunto de datos se utilizará para entrenar el sistema de alerta sísmica clasificando el sismo en grado de intencidad y enviar alertas a la población.
 
-3. **`Imagenes`**: En esta sección, se incluirán cualquier otro recurso necesario para el proyecto, como imágenes, videos, manuales de usuario, etc.
 
+3. **`scripts`**: Codigo fuente de la obtención de los datos de los distintos sitios web, normalización de datos y carga automatica para la actualización de los datos.
 
-4. **`scripts`**: Codigo fuente de la obtención de los datos de los distintos sitios web, normalización de datos y carga automatica para la actualización de los datos.
+4. **`etl`**: Transformación y normalización de los datos.
 
-5. **`etl`**: Transformación y normalización de los datos.
-
-6. **`eda`**: Exploración de los datos.
+5. **`eda`**: Exploración de los datos.
 ## Mapa de peligrosidad America: [link](https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/atoms/files/SAmer-Proceedings2010_1.pdf)
 
 
