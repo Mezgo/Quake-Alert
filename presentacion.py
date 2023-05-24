@@ -2,7 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pydeck as pdk
 import pandas as pd
-import pdfkit
+
 
 def show_presentacion():
     """
