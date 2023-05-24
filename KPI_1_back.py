@@ -92,7 +92,27 @@ def show_kpi_1():
                  (pd.to_datetime(df['fecha_local']).dt.date <= fecha_fin.date())]
 
 
-        
+        '''
+        st.markdown("<h1 style='font-size: 30px;'>KPI 1: Distribución de sismos por categoría de magnitud</h1>", unsafe_allow_html=True)
+        st.subheader('Rango de Fechas')
+
+        # Mostrar el selector de fecha de inicio con una clave única 'fecha_inicio_selector'
+        fecha_inicio = st.date_input('Fecha de inicio', value=fecha_min, min_value=fecha_min, max_value=fecha_max,
+                                     key='fecha_inicio_selector')
+
+        # Mostrar el selector de fecha de fin con una clave única 'fecha_fin_selector'
+        fecha_fin = st.date_input('Fecha de fin', value=fecha_max, min_value=fecha_min, max_value=fecha_max,
+                                  key='fecha_fin_selector')
+
+        if fecha_inicio > fecha_fin:
+            st.error('La fecha de inicio no puede ser posterior a la fecha de fin.')
+            return
+            
+            
+         df_filtrado = df[(pd.to_datetime(df['fecha_local']).dt.date >= fecha_inicio) &
+                  (pd.to_datetime(df['fecha_local']).dt.date <= fecha_fin)]
+   
+        '''
         
     with col2:
         st.empty()
@@ -109,7 +129,7 @@ def show_kpi_1():
         porcentajes = magnitud_counts / total_sismos * 100
 
         # Obtener la categoría con el porcentaje mayor
-        categoria_mayor = magnitud_counts.idxmax()
+        categoria_mayor = porcentajes.idxmax()
         porcentaje_mayor = porcentajes.max()
         
     '''
@@ -136,8 +156,8 @@ def show_kpi_1():
         st.markdown(
             f"""
             <div class="card">
-                <h2 class="kpi-title">KPI: Categoría mas frecuente, <span style="color:#e11e30">{categoria_mayor}</span> </h2>
-                <h1 class="kpi-value"> {porcentaje_mayor:.2f}%</h1>
+                <h2 class="kpi-title">KPI: Categoría con mayor porcentaje</h2>
+                <h1 class="kpi-value">{porcentaje_mayor:.2f}%</h1>
             </div>
             """,
             unsafe_allow_html=True

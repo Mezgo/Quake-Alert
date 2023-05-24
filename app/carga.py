@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import datetime
 import json
-import google.auth
+#import google.auth
 from google.cloud import storage
 
 PROJECT_ID = 'quake-alert-e44c3'

@@ -3,9 +3,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import time
 
+def cargar_estilos():
+        with open('style.css') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 def show_kpi_4():
-    st.title("KPI 4")
+    #st.title("KPI 4")
+             
+    cargar_estilos()
 
     def leer_datos_csv(archivo_csv):
         df = pd.read_csv(archivo_csv)
@@ -22,6 +27,7 @@ def show_kpi_4():
         sismos_por_hora = df[filtro]['fecha_hora'].dt.hour.value_counts().sort_index()
         return sismos_por_hora
 
+    '''
     def graficar_sismos_por_hora(sismos_por_hora):
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.bar(sismos_por_hora.index, sismos_por_hora.values)
@@ -29,7 +35,8 @@ def show_kpi_4():
         ax.set_ylabel('Cantidad de Sismos')
         ax.set_title('Cantidad de Sismos por Hora del Día (Magnitud > 5, Profundidad < 70 km)')
         return fig
-
+    '''
+    
     def graficar_sismos_por_hora_barras_y_lineas(sismos_por_hora):
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.bar(sismos_por_hora.index, sismos_por_hora.values, color='blue', label='Barras')
@@ -44,27 +51,66 @@ def show_kpi_4():
     df = leer_datos_csv('chileFrec.csv')
     df_filtrado = filtrar_sismos(df, 5, 70)
     sismos_por_hora = contar_sismos_por_hora(df_filtrado, time(0, 0), time(23, 59))
-
-    # Dividir la pantalla en dos columnas
-    col1, col2 = st.columns([0.65, 0.35])
-
-    # Columna 1: Gráfico de sismos por hora del día (gráfico de barras y líneas)
+    
+    
+    '''
+    SECCION LOGO
+    '''
+    col1, col2, col3 = st.columns([0.55, 0.05, 0.4])
     with col1:
+            col1.image('logo.png')
+    with col2: 
+            st.empty()
+    
+    
+    '''
+    SECCION KPI
+    '''
+    col1, col2, col3 = st.columns([0.55, 0.05, 0.4])
+    with col1:
+        #st.markdown("<h1 style='font-size: 30px;'>Horas del dia en que mas sismos se producen</h1>", unsafe_allow_html=True)
         appointment = st.slider(
             "Selecciona un rango horario:",
             value=(time(0, 0), time(23, 59))
         )
-
+    with col2:
+        st.empty()
+    with col3:
+        st.empty()
+    
+    
+    '''
+    SECCION CUERPO
+    '''
+    col1, col2, col3 = st.columns([0.55, 0.05, 0.4])
+    with col1:
+        st.markdown("<h1 style='font-size: 30px;'>Horas del dia en que mas sismos se producen</h1>", unsafe_allow_html=True)
         sismos_por_hora = contar_sismos_por_hora(df_filtrado, appointment[0], appointment[1])
-
+        '''
         fig = graficar_sismos_por_hora(sismos_por_hora)
         st.pyplot(fig)
-
+        '''
         fig = graficar_sismos_por_hora_barras_y_lineas(sismos_por_hora)
         st.pyplot(fig)
-
-    # Columna 2: Información adicional
     with col2:
-        st.write("Métrica sismo chile")
+        st.empty()
+    with col3:
+        #st.empty()
+        st.write('<div class="cuerpo_titulo">Conclusion</div>', unsafe_allow_html=True)
+        
+        st.markdown(
+            '<div class="texto_conclusion">Chile esta afectada por una gran cantidad de sismos, pero los de magnitud superior a 5 escala ritcher y con una profundidad menor a 70kms, se producen 1am, 10am, 18pm</div>', 
+            unsafe_allow_html=True
+            )
+        
 
-
+    
+    '''
+    SECCION FOOTER
+    '''
+    col1, col2, col3 = st.columns([0.55, 0.05, 0.4])
+    with col1:
+        st.markdown('<div class="EMPTY_footer"></div>', unsafe_allow_html=True)
+        col1.image('logo_footer.png')
+    with col2:
+        st.empty()
